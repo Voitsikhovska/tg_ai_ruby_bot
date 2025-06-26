@@ -1,0 +1,31 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  database: telegram_ai_bot_development
+
+test:
+  <<: *default
+  database: telegram_ai_bot_test
+
+production:
+  primary: &primary_production
+    <<: *default
+    database: telegram_ai_bot_production
+    username: user_api
+    password: apiuser
+  cache:
+    <<: *primary_production
+    database: telegram_ai_bot_production_cache
+    migrations_paths: db/cache_migrate
+  queue:
+    <<: *primary_production
+    database: telegram_ai_bot_production_queue
+    migrations_paths: db/queue_migrate
+  cable:
+    <<: *primary_production
+    database: telegram_ai_bot_production_cable
+    migrations_paths: db/cable_migrate
